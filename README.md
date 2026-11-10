@@ -50,8 +50,44 @@ All modules live under `src/adaptive_sequence_model/`:
 | `portfolio` | Portfolio research |
 | `integrations` | External system adapters |
 
-These are empty extension points. Concrete interfaces should be introduced with
+These are extension points. Concrete interfaces should be introduced with
 their implementations and tests as later research requirements become clear.
+
+## Experiment configuration
+
+`configs/base.yaml` lists all settings; `configs/smoke.yaml` is a minimal independent
+example. Validate without reading datasets or running training:
+
+```sh
+uv run --locked python -m adaptive_sequence_lab.validate_config configs/smoke.yaml
+uv run --locked python -m adaptive_sequence_model.validate_config configs/smoke.yaml --save
+```
+
+Both commands use the same parser. With the environment activated, the issue's
+`python -m adaptive_sequence_lab.validate_config configs/smoke.yaml` command also
+works. `--save` writes the resolved defaults and supplied settings to
+`<output_dir>/config.yaml`; it replaces an existing snapshot at that location.
+The Python API is `load_config(path)` and `save_config(config)` in
+`adaptive_sequence_model.config`.
+
+The schema covers dataset, target, features, split, model, optimizer, evaluation,
+seed, and output directory. Unknown or duplicate keys are errors. Horizon,
+lookback, and model dimensions must be positive integers; optimizer learning rate
+must be positive and finite. Model names are `linear`, `lstm`, and `transformer`;
+these reserve configuration names only, with no training implementation yet.
+Evaluation metrics are `mse`, `mae`, and `rmse`.
+
+Split dates use `YYYY-MM-DD` and inclusive endpoints. Train, validation, and test
+must be disjoint and chronologically ordered. This checks configured periods;
+future dataset code must also prevent target-horizon leakage across boundaries.
+Dataset and output paths are relative to the working directory (run commands
+from the repository root), with no home, environment-variable, absolute-path,
+or parent-directory expansion. Dataset existence is not checked at this stage.
+
+Configuration files and snapshots are public settings only. Credential fields
+are unsupported and unknown fields are rejected; environment variables are never
+expanded or captured. Keep credentials in external secret storage and never put
+secrets in ordinary configuration values, including filenames or column names.
 
 ## Public/private boundary and licensing
 
