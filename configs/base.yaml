@@ -1,0 +1,27 @@
+seed: 0
+output_dir: artifacts/experiment
+dataset:
+  path: data/research.csv
+  format: csv
+  date_column: date
+target:
+  column: close
+  horizon: 1
+features:
+  columns: [close]
+  lookback: 20
+split:
+  train: {start: '2020-01-01', end: '2022-12-31'}
+  validation: {start: '2023-01-01', end: '2023-12-31'}
+  test: {start: '2024-01-01', end: '2024-12-31'}
+model:
+  name: linear
+  hidden_size: 64
+  num_layers: 1
+  dropout: 0.0
+optimizer:
+  name: adam
+  learning_rate: 0.001
+  weight_decay: 0.0
+evaluation:
+  metrics: [mse, mae]

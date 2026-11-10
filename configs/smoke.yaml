@@ -1,0 +1,11 @@
+# Minimal independent example; omitted settings use schema defaults.
+seed: 0
+output_dir: artifacts/smoke
+dataset:
+  path: data/smoke.csv
+features:
+  lookback: 2
+split:
+  train: {start: '2024-01-01', end: '2024-01-15'}
+  validation: {start: '2024-01-16', end: '2024-01-23'}
+  test: {start: '2024-01-24', end: '2024-01-31'}

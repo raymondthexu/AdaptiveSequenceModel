@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Reusable foundations for sequence-model research."
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = ["pydantic==2.12.5", "PyYAML==6.0.3"]
 
 [dependency-groups]
 dev = [
